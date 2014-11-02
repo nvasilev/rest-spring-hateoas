@@ -1,6 +1,6 @@
 package org.jug.bg.rest.hateoas.spring.alternative.resource;
 
-import org.jug.bg.rest.hateoas.spring.alternative.payload.Alternative;
+import org.jug.bg.rest.hateoas.spring.alternative.payload.AlternativePayload;
 import org.jug.bg.rest.hateoas.spring.alternative.repository.AlternativeData;
 import org.jug.bg.rest.hateoas.spring.alternative.repository.AlternativeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,13 @@ public class AlternativeResource {
     private AlternativeRepository repository;
 
     @RequestMapping(value = "/{id}", method= RequestMethod.GET)
-    public HttpEntity<Alternative> getAlternative(@PathVariable("id") Long alternativeId) {
+    public HttpEntity<AlternativePayload> getAlternative(@PathVariable("id") Long alternativeId) {
         AlternativeData alternativeData = repository.find(alternativeId);
-
-        Alternative alternative = buildAlternative(alternativeData);
-//        alternative.add(ControllerLinkBuilder.linkTo(
-//            ControllerLinkBuilder.methodOn(AlternativeResource.class).getAlternative(alternativeId)).withSelfRel());
-
-        return new ResponseEntity<>(alternative, HttpStatus.OK);
+        AlternativePayload alternativePayload = buildAlternative(alternativeData);
+        return new ResponseEntity<>(alternativePayload, HttpStatus.OK);
     }
 
-    private Alternative buildAlternative(AlternativeData data) {
-        return Alternative.Builder.builder().withId(data.getAlternativeId()).withValue(data.getValue()).build();
+    private AlternativePayload buildAlternative(AlternativeData data) {
+        return AlternativePayload.Builder.builder().withId(data.getAlternativeId()).withValue(data.getValue()).build();
     }
 }

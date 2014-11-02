@@ -8,7 +8,6 @@ import org.jug.bg.rest.hateoas.spring.vote.repository.VoteData;
 import org.jug.bg.rest.hateoas.spring.vote.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,8 +37,8 @@ public class VoteResource {
             throw new NotFoundException("Missing vote with id: " + id);
         }
         VotePayload payload = assembler.toResource(voteData);
-        payload.add(
-            ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(VoteResource.class).getVote(id)).withSelfRel());
+
+        // TODO: add link to alternative via EntityLinks.linkToSingleResource(AlternativePayload.class, alternativeId)
 
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
@@ -52,28 +51,35 @@ public class VoteResource {
         VoteData newVote = repository.createVote(voteParam.getEmail());
 
         VotePayload payload = assembler.toResource(newVote);
-        payload.add(ControllerLinkBuilder
-                        .linkTo(ControllerLinkBuilder.methodOn(VoteResource.class).getVote(payload.getVoteId()))
-                        .withSelfRel());
+
+        // TODO: add link to alternative via EntityLinks.linkToSingleResource(AlternativePayload.class, alternativeId)
 
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleNotFoundException(NotFoundException nofEx) {
-        // LOGGER.error("Handling not found exception. A NOT FOUND error http status will be returned as response.", nofEx);
+    public void handleNotFoundException(NotFoundException notFoundException) {
+        handleError(notFoundException,
+                    "Handling not found exception. A NOT FOUND error http status will be returned as response.");
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handle(RuntimeException rEx) {
-        // LOGGER.error("Handling runtime exception. An INTERNAL SERVER error http status will be returned as response.", rEx);
+    public void handle(RuntimeException runtimeException) {
+        handleError(runtimeException,
+                    "Handling runtime exception. An INTERNAL SERVER error http status will be returned as response.");
     }
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handle(BadRequestException brEx) {
-        // LOGGER.error("Handling bad request exception. A BAD REQUEST error http status will be returned as response.", brEx);
+    public void handle(BadRequestException badRequestException) {
+        handleError(badRequestException,
+                    "Handling bad request exception. A BAD REQUEST error http status will be returned as response.");
+    }
+
+    private void handleError(RuntimeException exception, String errMsg) {
+        System.err.println(errMsg);
+        exception.printStackTrace(System.err);
     }
 }

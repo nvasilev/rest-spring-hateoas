@@ -8,8 +8,8 @@ import org.springframework.hateoas.core.Relation;
 
 @Relation(value = "alternative", collectionRelation = "alternatives")
 @JsonPropertyOrder({"alternativeId", "value"})
-@JsonDeserialize(builder = Alternative.Builder.class)
-public class Alternative extends ResourceSupport {
+@JsonDeserialize(builder = AlternativePayload.Builder.class)
+public class AlternativePayload extends ResourceSupport {
 
     private Long alternativeId;
 
@@ -17,7 +17,7 @@ public class Alternative extends ResourceSupport {
 
     // TODO: list of votes
 
-    private Alternative(Builder builder) {
+    private AlternativePayload(Builder builder) {
         this.alternativeId = builder.alternativeId;
         this.value = builder.value;
     }
@@ -47,8 +47,8 @@ public class Alternative extends ResourceSupport {
             return this;
         }
 
-        public Alternative build() {
-            return new Alternative(this);
+        public AlternativePayload build() {
+            return new AlternativePayload(this);
         }
     }
 }
