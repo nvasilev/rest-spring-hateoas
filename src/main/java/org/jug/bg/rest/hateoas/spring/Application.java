@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.EnableEntityLinks;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 @Configuration
 @EnableAutoConfiguration
 @EnableEntityLinks
+@EnableHypermediaSupport(type= {EnableHypermediaSupport.HypermediaType.HAL})
 @ComponentScan
 public class Application {
 
