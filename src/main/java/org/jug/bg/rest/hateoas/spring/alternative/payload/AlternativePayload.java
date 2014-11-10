@@ -15,11 +15,26 @@ public class AlternativePayload extends ResourceSupport {
 
     private String value;
 
+    private Integer votesCount;
+
     // TODO: list of votes
 
     private AlternativePayload(Builder builder) {
         this.alternativeId = builder.alternativeId;
         this.value = builder.value;
+        this.votesCount = builder.votesCount;
+    }
+
+    public Long getAlternativeId() {
+        return alternativeId;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public Integer getVotesCount() {
+        return votesCount;
     }
 
     public static class Builder {
@@ -27,6 +42,8 @@ public class AlternativePayload extends ResourceSupport {
         private Long alternativeId;
 
         private String value;
+
+        private Integer votesCount;
 
         private Builder() {
         }
@@ -44,6 +61,11 @@ public class AlternativePayload extends ResourceSupport {
         @JsonProperty("value")
         public Builder withValue(String value) {
             this.value = value;
+            return this;
+        }
+
+        public Builder withVotesCount(Integer votesCount) {
+            this.votesCount = votesCount;
             return this;
         }
 

@@ -35,7 +35,7 @@ public class VoteResource {
     private EntityLinks entityLinks;
 
     @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<List<VotePayload>> getVotes() {
+    public ResponseEntity<List<VotePayload>> getVotes() {
         Long alternativeId = 1L;
         List<VoteData> votesData = repository.getAll(alternativeId);
         List<VotePayload> votes = buildVotes(votesData);
@@ -43,7 +43,7 @@ public class VoteResource {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity<VotePayload> getVote(@PathVariable("id") Long id) {
+    public ResponseEntity<VotePayload> getVote(@PathVariable("id") Long id) {
         VoteData voteData = repository.findVote(id);
         if (voteData == null) {
             throw new NotFoundException("Missing vote with id: " + id);
@@ -59,8 +59,7 @@ public class VoteResource {
     @RequestMapping(method = RequestMethod.POST,
                     consumes = MediaType.APPLICATION_JSON_VALUE,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpEntity<VotePayload> getVote(@RequestBody
-                                           VotePayload voteParam) { // FIXME: change request body!
+    public ResponseEntity<VotePayload> getVote(@RequestBody VotePayload voteParam) { // FIXME: change request body!
         VoteData newVote = repository.createVote(voteParam.getEmail());
 
         VotePayload payload = assembler.toResource(newVote);

@@ -8,10 +8,10 @@ import org.springframework.hateoas.config.EnableEntityLinks;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 @Configuration
+@ComponentScan
 @EnableAutoConfiguration
 @EnableEntityLinks
 @EnableHypermediaSupport(type= {EnableHypermediaSupport.HypermediaType.HAL})
-@ComponentScan
 public class Application {
 
     public static void main(String[] args) {

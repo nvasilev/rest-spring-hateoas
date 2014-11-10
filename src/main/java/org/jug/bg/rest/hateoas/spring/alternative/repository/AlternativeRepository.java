@@ -3,6 +3,7 @@ package org.jug.bg.rest.hateoas.spring.alternative.repository;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
