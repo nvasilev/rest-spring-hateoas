@@ -1,3 +1,7 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.poll.resource;
 
 import org.jug.bg.rest.hateoas.spring.alternative.payload.AlternativePayload;
@@ -21,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
-@ExposesResourceFor(PollPayload.class)
+@ExposesResourceFor(PollPayload.class) // used by EntityLinks accessor to look up resources
 @RequestMapping("/polls")
 public class PollResource {
 
@@ -34,18 +38,9 @@ public class PollResource {
     @Autowired
     private AlternativeResource alternativeResource;
 
+    // used for generating links to resources (classes annotated with @ExposesResourceFor)
     @Autowired
     private EntityLinks entityLinks;
-
-//    @RequestMapping(method = GET, produces = APPLICATION_HAL_JSON)
-//    public ResponseEntity<List<PollPayload> getPoll(@PathVariable("id") Long pollId) {
-//
-//        PollData data = repository.findPoll(pollId);
-//
-//        PollPayload payload = buildPayload(data);
-//
-//        return new ResponseEntity<>(payload, HttpStatus.OK);
-//    }
 
     @RequestMapping(value = "/{id}", method = GET, produces = APPLICATION_HAL_JSON)
     public ResponseEntity<PollPayload> getPoll(@PathVariable("id") Long pollId) {

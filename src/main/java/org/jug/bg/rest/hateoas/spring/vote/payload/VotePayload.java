@@ -1,12 +1,22 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.vote.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.jug.bg.rest.hateoas.spring.common.Builder;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
 
-@Relation(value = "vote", collectionRelation = "votes")
+/**
+ * Payload which is being serialized as a body when a vote resource is requested.
+ *
+ * @author Nikolay Vasilev
+ */
+@Relation(value = "vote", collectionRelation = "votes") // defines the key in the "_embedded" section in which a vote appears
 @JsonPropertyOrder({"voteId", "email"})
 @JsonDeserialize(builder = VotePayload.Builder.class)
 public class VotePayload extends ResourceSupport {
@@ -28,7 +38,7 @@ public class VotePayload extends ResourceSupport {
         return email;
     }
 
-    public static class Builder {
+    public static class Builder implements org.jug.bg.rest.hateoas.spring.common.Builder<VotePayload> {
 
         private Long voteId;
 

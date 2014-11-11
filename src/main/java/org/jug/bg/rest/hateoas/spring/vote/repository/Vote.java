@@ -1,14 +1,29 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.vote.repository;
 
 import java.util.Objects;
 
-public class VoteData {
+/**
+ * A domain object representing a vote. Currently it is just a dummy POJO without any behaviour.
+ *
+ * @author Nikolay Vasilev
+ */
+public class Vote {
 
-    private Long id;
+    /**
+     * Identifier.
+     */
+    private final Long id;
 
-    private String email;
+    /**
+     * Voter's email.
+     */
+    private final String email;
 
-    public VoteData(Long id, String email) {
+    public Vote(Long id, String email) {
         this.id = id;
         this.email = email;
     }
@@ -17,17 +32,8 @@ public class VoteData {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getEmail() {
-
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override
@@ -43,7 +49,8 @@ public class VoteData {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final VoteData other = (VoteData) obj;
+        final Vote other = (Vote) obj;
         return Objects.equals(this.id, other.id) && Objects.equals(this.email, other.email);
     }
+
 }

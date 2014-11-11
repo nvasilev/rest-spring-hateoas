@@ -1,3 +1,7 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.poll.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
