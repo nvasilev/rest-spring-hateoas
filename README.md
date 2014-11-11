@@ -3,17 +3,66 @@
 
 ## Vote ##
 
-Create vote
-
-`POST http://127.0.0.1:8080/polls/1/alternatives/1/votes/1`
-`Content-Type:application/json`
-`Accept:application/hal+json`
+### Get vote ###
+```
+GET http://127.0.0.1:8080/polls/1/alternatives/1/votes/1
+Accept:application/hal+json
+```
 ```
 #!json
+{
+    "voteId": 1,
+    "email": "a@b.com",
+    "_links": {
+        "self": {
+            "href": "http://127.0.0.1:8080/polls/1/alternatives/1/votes/1"
+        },
+        "votesCount": {
+            "href": "http://127.0.0.1:8080/polls/1/alternatives/1/votes/count"
+        }
+    }
+}
+```
 
+### Create vote ###
+
+Request
+```
+POST http://127.0.0.1:8080/polls/1/alternatives/1/votes/1
+Content-Type:application/json
+Accept:application/hal+json
+```
+```
+#!json
 {
   "email" : "a@b.com"
 }
+```
+Response: 201 CREATED
+```
+#!json
+{
+    "voteId": 1,
+    "email": "a@b.com",
+    "_links": {
+        "self": {
+            "href": "http://127.0.0.1:8080/polls/1/alternatives/1/votes/1"
+        },
+        "votesCount": {
+            "href": "http://127.0.0.1:8080/polls/1/alternatives/1/votes/count"
+        }
+    }
+}
+```
+
+### Votes Count ###
+
+```
+GET http://127.0.0.1:8080/polls/1/alternatives/1/votes/count
+```
+Response: 200 OK
+```
+3
 ```
 
 
