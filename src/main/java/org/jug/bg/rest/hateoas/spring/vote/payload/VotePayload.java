@@ -7,7 +7,6 @@ package org.jug.bg.rest.hateoas.spring.vote.payload;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.jug.bg.rest.hateoas.spring.common.Builder;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
 
@@ -38,7 +37,7 @@ public class VotePayload extends ResourceSupport {
         return email;
     }
 
-    public static class Builder implements org.jug.bg.rest.hateoas.spring.common.Builder<VotePayload> {
+    public static class Builder {
 
         private Long voteId;
 

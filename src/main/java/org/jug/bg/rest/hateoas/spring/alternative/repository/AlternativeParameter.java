@@ -2,7 +2,7 @@
  * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
  * 2014, Bulgarian Java Users Group
  */
-package org.jug.bg.rest.hateoas.spring.vote.repository;
+package org.jug.bg.rest.hateoas.spring.alternative.repository;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * Class used for to transfer vote-related data across the various layers of the application in an encapsulated manner.
+ * Class used for to transfer alternative-related data across the various layers of the application in an encapsulated
+ * manner.
  *
  * <p>See "Parameter object" refactoring design pattern.</p>
  *
@@ -19,23 +20,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  *
  * @author Nikolay Vasilev
  */
-@JsonPropertyOrder({"pollId", "alternativeId", "voteId", "email"})
-@JsonDeserialize(builder = VoteParameter.Builder.class)
-public class VoteParameter {
+@JsonPropertyOrder({"pollId", "alternativeId", "value"})
+@JsonDeserialize(builder = AlternativeParameter.Builder.class)
+public class AlternativeParameter {
 
     private final Long pollId;
 
     private final Long alternativeId;
 
-    private final Long voteId;
+    private final String value;
 
-    private final String email;
-
-    private VoteParameter(Builder builder) {
+    public AlternativeParameter(Builder builder) {
         this.pollId = builder.pollId;
         this.alternativeId = builder.alternativeId;
-        this.voteId = builder.voteId;
-        this.email = builder.email;
+        this.value = builder.value;
     }
 
     public Long getPollId() {
@@ -46,12 +44,8 @@ public class VoteParameter {
         return alternativeId;
     }
 
-    public Long getVoteId() {
-        return voteId;
-    }
-
-    public String getEmail() {
-        return email;
+    public String getValue() {
+        return value;
     }
 
     public static class Builder {
@@ -60,12 +54,9 @@ public class VoteParameter {
 
         private Long alternativeId;
 
-        private Long voteId;
+        private String value;
 
-        private String email;
-
-        private Builder() {
-        }
+        private Builder() {}
 
         public static Builder builder() {
             return new Builder();
@@ -85,21 +76,15 @@ public class VoteParameter {
             return this;
         }
 
-        @JsonProperty("voteId")
+        @JsonProperty("value")
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public Builder withVoteId(Long voteId) {
-            this.voteId = voteId;
+        public Builder withValue(String value) {
+            this.value = value;
             return this;
         }
 
-        @JsonProperty("email")
-        public Builder withEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public VoteParameter build() {
-            return new VoteParameter(this);
+        public AlternativeParameter build() {
+            return new AlternativeParameter(this);
         }
     }
 }

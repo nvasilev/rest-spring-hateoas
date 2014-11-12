@@ -4,6 +4,7 @@
  */
 package org.jug.bg.rest.hateoas.spring.vote.resource;
 
+import org.jug.bg.rest.hateoas.spring.alternative.resource.AlternativeResource;
 import org.jug.bg.rest.hateoas.spring.common.resource.AbstractResource;
 import org.jug.bg.rest.hateoas.spring.common.resource.BadRequestException;
 import org.jug.bg.rest.hateoas.spring.common.resource.NotFoundException;
@@ -21,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.LinkRef;
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ import java.util.List;
  *
  * @author Nikolay Vasilev
  */
-@RestController // marking that this class will handle requests for vote resource
+@RestController // indicates that class will handle requests for vote resource
 @ExposesResourceFor(VotePayload.class) // used by EntityLinks accessor to look up resources
 @RequestMapping("/polls/{pollId}/alternatives/{alternativeId}/votes")
 public class VoteResource extends AbstractResource {
@@ -123,13 +126,27 @@ public class VoteResource extends AbstractResource {
         @PathVariable("alternativeId") Long alternativeId)
     {
         VoteParameter voteParameter = VoteParameter.Builder.builder().withPollId(pollId).withAlternativeId(alternativeId).build();
-        List<Vote> votes = repository.retrieveAllVotesForAlternativeAndPoll(voteParameter);
-        int votesCount = (votes == null) ? 0 : votes.size();
+        int votesCount = repository.countAllVotesForAlternativeAndPoll(voteParameter);
         return new ResponseEntity<>(votesCount, HttpStatus.OK);
     }
 
     /**
-     * Auxiliary method adding links to the payload.
+     * Auxiliary method for adding links to the payload.
+     *
+     * <p><strong>Note:</strong> Note that this is part of the resource's payload construction and if we follow the best
+     * practices, the resource (in the terms of MVC is the controller), should be thin and delegate the real work to
+     * services and other components etc.
+     * <br />
+     * <br />
+     * The issue for such solution here is that the {@link Link} objects could be considered as part of the
+     * (RESTFul) representation of the resource. That is the reason to be built as part of the resource (rest
+     * controller).
+     * <br />
+     * <br />
+     * A compromise would probably be to create a <code>LinkBuilder</code> class dedicated on building Links. One could
+     * think that perhaps adding the links could be done in an assembler class, but then there is cyclic dependency
+     * between assembler's and resource's (i.e. ex-controller's) packages, because the assembler will need the resource
+     * for building the link and the resource itself will call the assembler in order to build the payload.</p>
      *
      * @param voteParameter Vote parameter.
      * @param payload Vote resource payload.
@@ -139,13 +156,21 @@ public class VoteResource extends AbstractResource {
         // building self link using the access to the rest controller request mapping
         Link selfLink = aSelfLink(voteParameter, payload);
 
+
+        Link parentAlternativeLink = anAlternativeLink(voteParameter);
+
         // building a link to the vote counts for the current alternative
         Link votesCountLink = aVotesCountLink(voteParameter);
 
-        // Note that we have NOT declared the add(...) method to our payload class
+        // Note 1:
+        // Note that we do NOT declare the following add(...) method to our payload class in order to add links
         // it's inherited by ResourceSupport class
+        //
+        // Note 2:
+        // Mind that the order of the links defined here is of importance when serialized later on.
         payload.add(selfLink);
         payload.add(votesCountLink);
+        payload.add(parentAlternativeLink);
     }
 
     /**
@@ -159,7 +184,7 @@ public class VoteResource extends AbstractResource {
     private Link aSelfLink(VoteParameter voteParameter, VotePayload payload) {
         long pollId = voteParameter.getPollId();
         long alternativeId = voteParameter.getAlternativeId();
-        long voteId = payload.getVoteId(); // dirty hack as I don't hive time to refactor the code
+        long voteId = payload.getVoteId(); // dirty hack but I don't hive time to refactor the code right now
 
         return ControllerLinkBuilder.linkTo(
 
@@ -171,6 +196,7 @@ public class VoteResource extends AbstractResource {
 
                 .withSelfRel(); // adding the self "rel" attribute to the link
     }
+
 
     /**
      * Builder method for a link to votes count resource using {@link ControllerLinkBuilder} class.
@@ -192,5 +218,22 @@ public class VoteResource extends AbstractResource {
                             .getVoteCounts(pollId, alternativeId))
 
                 .withRel("votesCount"); // adding a customer-specific "rel" attribute to the link
+    }
+
+    /**
+     * Builder method for a link to alternative resource using {@link ControllerLinkBuilder} class.
+     *
+     * @param voteParameter Vote parameter.
+     *
+     * @return a link to alternative resource.
+     */
+    private Link anAlternativeLink(VoteParameter voteParameter) {
+        long pollId = voteParameter.getPollId();
+        long alternativeId = voteParameter.getAlternativeId();
+
+        return ControllerLinkBuilder.linkTo(
+            ControllerLinkBuilder.methodOn(AlternativeResource.class)
+                                 .getAlternative(pollId, alternativeId))
+                                    .withRel("alternative");
     }
 }

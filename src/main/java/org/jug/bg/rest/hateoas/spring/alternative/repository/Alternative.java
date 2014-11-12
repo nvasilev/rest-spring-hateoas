@@ -1,14 +1,23 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.alternative.repository;
 
 import java.util.Objects;
 
-public class AlternativeData {
+/**
+ * A domain object representing an alternative. Currently it is just a dummy POJO without any behaviour.
+ *
+ * @author Nikolay Vasilev
+ */
+public class Alternative {
 
     private Long alternativeId;
 
     private String value;
 
-    public AlternativeData(Long alternativeId, String value) {
+    public Alternative(Long alternativeId, String value) {
         this.alternativeId = alternativeId;
         this.value = value;
     }
@@ -34,7 +43,7 @@ public class AlternativeData {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final AlternativeData other = (AlternativeData) obj;
+        final Alternative other = (Alternative) obj;
         return Objects.equals(this.alternativeId, other.alternativeId) && Objects.equals(this.value, other.value);
     }
 }

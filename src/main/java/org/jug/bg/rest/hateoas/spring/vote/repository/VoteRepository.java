@@ -1,13 +1,20 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.vote.repository;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Dummy in-memory implementation of a Vote repository.
- * <br />
- * <strong>Note:</strong> Built for sake of simplicity and focusing on REST-related part of the project.
+ *
+ * <p><strong>Note:</strong> Built for sake of simplicity and keeping the focus on REST-related part of the project.</p>
+ *
+ * @author Nikolay Vasilev
  */
 @Repository
 public class VoteRepository {
@@ -35,30 +42,9 @@ public class VoteRepository {
 
             vote = store.get(pollId).get(alternativeId).get(voteId);
         } catch (NullPointerException exception) {
-            // lame as hell but not the repository is the focus of this project.
+            // I know, NPE handling is lame as hell but not the repository is the focus of this project, so live with it :p
         }
         return vote;
-    }
-
-    /**
-     * Retrieves all votes by poll and alternative ids.
-     *
-     * @param voteParameter Vote parameter used for votes retrieval.
-     *
-     * @return Returns all votes by poll and alternative ids if exist or empty array otherwise.
-     */
-    public List<Vote> retrieveAllVotesForAlternativeAndPoll(VoteParameter voteParameter) {
-        List<Vote> votes;
-        try {
-            Long pollId = voteParameter.getPollId();
-            Long alternativeId = voteParameter.getAlternativeId();
-
-            votes = new ArrayList<>(store.get(pollId).get(alternativeId).values());
-        } catch (NullPointerException npe) {
-            // lame as hell but not the repository is the focus of this project.
-            votes = Collections.emptyList();
-        }
-        return votes;
     }
 
     /**
@@ -75,14 +61,13 @@ public class VoteRepository {
             store.put(pollId, new HashMap<>());
         }
 
-
         Long alternativeId = voteParameter.getAlternativeId();
         Map<Long, Map<Long, Vote>> alternativesMap = store.get(pollId);
         if (!alternativesMap.containsKey(alternativeId)) {
             alternativesMap.put(alternativeId, new HashMap<>());
         }
 
-        // FIXME: delegate Vote's creation to a builder or a factory
+        // FIXME: delegate Vote's creation to a builder or a factory?
         Vote vote = new Vote(counter++, voteParameter.getEmail());
 
         // storing the vote
@@ -91,4 +76,27 @@ public class VoteRepository {
 
         return vote;
     }
+
+    /**
+     * Retrieves all votes by poll and alternative ids.
+     *
+     * @param voteParameter Vote parameter used for votes retrieval.
+     *
+     * @return Returns all votes by poll and alternative ids if exist or empty array otherwise.
+     */
+    public Integer countAllVotesForAlternativeAndPoll(VoteParameter voteParameter) {
+        Long pollId = voteParameter.getPollId();
+        Long alternativeId = voteParameter.getAlternativeId();
+
+        int votesCount;
+
+        try {
+            votesCount = store.get(pollId).get(alternativeId).values().size();
+        } catch (NullPointerException npe) {
+            // I know, NPE handling is lame as hell but not the repository is the focus of this project, so live with it :p
+            votesCount = 0;
+        }
+        return votesCount;
+    }
+
 }

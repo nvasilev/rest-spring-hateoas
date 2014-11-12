@@ -1,3 +1,7 @@
+/*
+ * Some rights reserved. This work is licensed under a Creative Commons License, BY, Version 4.0
+ * 2014, Bulgarian Java Users Group
+ */
 package org.jug.bg.rest.hateoas.spring.alternative.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,6 +10,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
 
+/**
+ * Payload which is being serialized as a body when an alternative resource is requested.
+ *
+ * @author Nikolay Vasilev
+ */
+// @Relation defines the key in the "_embedded" section in which an alternative appears. When the alternative is more
+// than one is picked the plural form.
 @Relation(value = "alternative", collectionRelation = "alternatives")
 @JsonPropertyOrder({"alternativeId", "value"})
 @JsonDeserialize(builder = AlternativePayload.Builder.class)
@@ -16,8 +27,6 @@ public class AlternativePayload extends ResourceSupport {
     private String value;
 
     private Integer votesCount;
-
-    // TODO: list of votes
 
     private AlternativePayload(Builder builder) {
         this.alternativeId = builder.alternativeId;
@@ -52,7 +61,7 @@ public class AlternativePayload extends ResourceSupport {
             return new Builder();
         }
 
-        @JsonProperty("alternativeId")
+        @JsonProperty("id")
         public Builder withId(Long alternativeId) {
             this.alternativeId = alternativeId;
             return this;
@@ -64,6 +73,7 @@ public class AlternativePayload extends ResourceSupport {
             return this;
         }
 
+        @JsonProperty("votesCount")
         public Builder withVotesCount(Integer votesCount) {
             this.votesCount = votesCount;
             return this;

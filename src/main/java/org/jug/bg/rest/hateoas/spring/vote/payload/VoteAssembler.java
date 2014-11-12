@@ -21,7 +21,7 @@ public class VoteAssembler extends ResourceAssemblerSupport<Vote, VotePayload> {
         super(VoteResource.class, VotePayload.class);
     }
 
-    // convers the domain object into a resource payload
+    // converts the domain object into a resource payload
     @Override
     public VotePayload toResource(Vote entity) {
         VotePayload payload = instantiateResource(entity);
