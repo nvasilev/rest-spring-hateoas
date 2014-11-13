@@ -6,6 +6,7 @@ package org.jug.bg.rest.hateoas.spring.vote.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
@@ -17,11 +18,13 @@ import org.springframework.hateoas.core.Relation;
  */
 @Relation(value = "vote", collectionRelation = "votes") // defines the key in the "_embedded" section in which a vote appears
 @JsonPropertyOrder({"voteId", "email"})
-@JsonDeserialize(builder = VotePayload.Builder.class)
+@JsonDeserialize(builder = VotePayload.Builder.class) // used when writing rest clients
 public class VotePayload extends ResourceSupport {
 
+    @JsonProperty("id")
     private Long voteId;
 
+    @JsonProperty("email")
     private String email;
 
     private VotePayload(Builder builder) {
@@ -49,13 +52,13 @@ public class VotePayload extends ResourceSupport {
             return new Builder();
         }
 
-        @JsonProperty("id")
+        @JsonSetter("id")
         public Builder withId(Long voteId) {
             this.voteId = voteId;
             return this;
         }
 
-        @JsonProperty("email")
+        @JsonSetter("email")
         public Builder withEmail(String email) {
             this.email = email;
             return this;

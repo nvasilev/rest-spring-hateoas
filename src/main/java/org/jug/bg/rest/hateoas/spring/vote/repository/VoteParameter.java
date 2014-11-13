@@ -7,6 +7,7 @@ package org.jug.bg.rest.hateoas.spring.vote.repository;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
@@ -23,12 +24,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = VoteParameter.Builder.class)
 public class VoteParameter {
 
+    @JsonProperty("pollId")
     private final Long pollId;
 
+    @JsonProperty("alternativeId")
     private final Long alternativeId;
 
+    @JsonProperty("voteId")
     private final Long voteId;
 
+    @JsonProperty("email")
     private final String email;
 
     private VoteParameter(Builder builder) {
@@ -71,28 +76,28 @@ public class VoteParameter {
             return new Builder();
         }
 
-        @JsonProperty("pollId")
+        @JsonSetter("pollId")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         public Builder withPollId(Long pollId) {
             this.pollId = pollId;
             return this;
         }
 
-        @JsonProperty("alternativeId")
+        @JsonSetter("alternativeId")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         public Builder withAlternativeId(Long alternativeId) {
             this.alternativeId = alternativeId;
             return this;
         }
 
-        @JsonProperty("voteId")
+        @JsonSetter("voteId")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         public Builder withVoteId(Long voteId) {
             this.voteId = voteId;
             return this;
         }
 
-        @JsonProperty("email")
+        @JsonSetter("email")
         public Builder withEmail(String email) {
             this.email = email;
             return this;

@@ -6,13 +6,24 @@ package org.jug.bg.rest.hateoas.spring.poll.repository;
 
 import java.util.Objects;
 
-public class PollData {
+/**
+ * A domain object representing a poll. Currently it is just a dummy POJO without any behaviour.
+ *
+ * @author Nikolay Vasilev
+ */
+public class Poll {
 
-    private Long id;
+    /**
+     * Identifier.
+     */
+    private final Long id;
 
-    private String topic;
+    /**
+     * Topic of the poll.
+     */
+    private final String topic;
 
-    public PollData(Long id, String topic) {
+    public Poll(Long id, String topic) {
         this.id = id;
         this.topic = topic;
     }
@@ -30,7 +41,7 @@ public class PollData {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final PollData other = (PollData) obj;
+        final Poll other = (Poll) obj;
         return Objects.equals(this.id, other.id) && Objects.equals(this.topic, other.topic);
     }
 

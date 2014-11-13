@@ -72,7 +72,6 @@ public class AlternativeResource extends AbstractResource {
         @PathVariable("pollId") Long pollId,
         @PathVariable("id")     Long alternativeId)
     {
-
         AlternativeParameter parameter = AlternativeParameter.Builder.builder()
                             .withPollId(pollId).withAlternativeId(alternativeId).build();
 
@@ -98,19 +97,14 @@ public class AlternativeResource extends AbstractResource {
         @RequestBody AlternativeParameter requestPayload)
     {
         String value = requestPayload.getValue();
-
         if (value == null || value.isEmpty()) {
             // this exceptional situation is handled by the parent's handler method
             throw new BadRequestException("Invalid alternative value.");
         }
-
         AlternativeParameter parameter = AlternativeParameter.Builder.builder()
                             .withPollId(pollId).withValue(value).build();
-
         Alternative alternative = repository.storeAlternative(parameter);
-
         AlternativePayload payload = buildPayload(parameter, alternative);
-
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
     }
 

@@ -6,6 +6,7 @@ package org.jug.bg.rest.hateoas.spring.alternative.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
@@ -19,13 +20,16 @@ import org.springframework.hateoas.core.Relation;
 // than one is picked the plural form.
 @Relation(value = "alternative", collectionRelation = "alternatives")
 @JsonPropertyOrder({"alternativeId", "value"})
-@JsonDeserialize(builder = AlternativePayload.Builder.class)
+@JsonDeserialize(builder = AlternativePayload.Builder.class) // used when writing rest clients
 public class AlternativePayload extends ResourceSupport {
 
+    @JsonProperty("id")
     private Long alternativeId;
 
+    @JsonProperty("value")
     private String value;
 
+    @JsonProperty("voteCount")
     private Integer votesCount;
 
     private AlternativePayload(Builder builder) {
@@ -61,19 +65,19 @@ public class AlternativePayload extends ResourceSupport {
             return new Builder();
         }
 
-        @JsonProperty("id")
+        @JsonSetter("id")
         public Builder withId(Long alternativeId) {
             this.alternativeId = alternativeId;
             return this;
         }
 
-        @JsonProperty("value")
+        @JsonSetter("value")
         public Builder withValue(String value) {
             this.value = value;
             return this;
         }
 
-        @JsonProperty("votesCount")
+        @JsonSetter("votesCount")
         public Builder withVotesCount(Integer votesCount) {
             this.votesCount = votesCount;
             return this;
